@@ -33,5 +33,4 @@ def get_hardware_info():
 
 # 获取并打印硬件信息
 get_hardware_info()
-```
-···dd36o56haopinzhong 
+```--updating
