@@ -7,7 +7,7 @@
 ## <a id="a"></a>  python
 
 
-```
+```python
 
 const { Client } = require('@microsoft/microsoft-graph-client');
 
