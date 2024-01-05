@@ -4,10 +4,43 @@
 
 
  
-## <a id="a"></a>  考虑考其味无穷
+## <a id="a"></a>  python
 
 
 ```
+
+const { Client } = require('@microsoft/microsoft-graph-client');
+
+// Initialize Graph client
+const client = Client.init({
+  authProvider: (done) => {
+    // Use your OAuth access token here
+    done(null, 'YOUR_ACCESS_TOKEN');
+  }
+});
+
+// Create an event in the calendar
+const newEvent = {
+  subject: 'Meeting',
+  start: {
+    dateTime: '2024-01-06T12:00:00',
+    timeZone: 'Pacific Standard Time'
+  },
+  end: {
+    dateTime: '2024-01-06T13:00:00',
+    timeZone: 'Pacific Standard Time'
+  }
+};
+
+client.api('/me/events')
+  .post(newEvent)
+  .then((res) => {
+    console.log('Event created:', res);
+  })
+  .catch((err) => {
+    console.log('Error creating event:', err);
+  });
+
 import psutil
 
 def get_hardware_info():
