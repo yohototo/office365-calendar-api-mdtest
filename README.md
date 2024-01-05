@@ -1,6 +1,5 @@
 当编写一个 README 文件时，重要的是清晰地传达项目的目的、如何使用它以及项目的重要信息。这是一个简单的示例：
 
-```markdown
 # Office 365 API test
 
 这是一个使用 Office 365 Calendar API 与 OneDrive 的示例项目。
