@@ -55,7 +55,7 @@ python main.py
 
 ## 许可证
 
-此项目采用 [MIT 许可证](LICENSE)进行许可。
+此项目采用 AGPL-3.0 license进行许可。
 
 ```
 随手记
