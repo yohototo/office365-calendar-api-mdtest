@@ -54,3 +54,29 @@ while True:
     if map[box_y][box_x] == "X":
         print("恭喜你，通关了！")
         break
+
+from O365 import Account
+
+# 替换为你的应用程序的客户端 ID 和客户端密钥
+client_id = 'your_client_id'
+client_secret = 'your_client_secret'
+
+# 创建一个 O365 账户
+credentials = (client_id, client_secret)
+account = Account(credentials)
+
+# 登录到账户
+if not account.is_authenticated:
+    # 如果没有授权，进行授权
+    account.authenticate(scopes=['basic', 'message_all'])
+    # 或者使用 account.authenticate(scopes=['basic', 'message_all', 'onedrive_all']) 来获取更多权限
+
+# 创建一封新邮件
+m = account.new_message()
+m.to.add('to_example@example.com')  # 替换为你要发送的收件人邮箱地址
+m.subject = '通关啦！'
+m.body = "恭喜你，成功通关迷宫游戏！"
+m.send()
+
+print("通关消息已发送！")
+
