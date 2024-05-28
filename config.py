@@ -49,3 +49,19 @@ if onedrive_response.status_code == 200:
         print('OneDrive 中没有文件或文件夹')
 else:
     print('无法获取 OneDrive 文件列表:', onedrive_response.text)
+
+<Configuration>
+    <Add SourcePath="\\Server\Share" OfficeClientEdition="64" Channel="MonthlyEnterprise">
+        <Product ID="O365ProPlusRetail">
+            <Language ID="en-us" />
+            <Language ID="ja-jp" />
+        </Product>
+        <Product ID="VisioProRetail">
+            <Language ID="en-us" />
+            <Language ID="ja-jp" />
+        </Product>
+    </Add>
+    <Updates Enabled="TRUE" UpdatePath="\\Server\Share" />
+    <Display Level="None" AcceptEULA="TRUE" />
+</Configuration>
+
