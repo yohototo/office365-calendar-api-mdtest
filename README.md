@@ -1,6 +1,6 @@
 # Office 365 API test
 
-这是一个使用 Office 365 Calendar API 与 OneDrive 的示例项目。
+这是一个使用 Office 365 Calendar API 与 OneDrive 的测试项目。
 
 ## 功能特点
 
