@@ -153,5 +153,30 @@ function updateItem(itemId) {
 // 调用函数来添加新项目并模拟更新项目的最后修改时间戳（根据需要选择执行）
 addNewItem(); // 添加新项目
 // updateItem(itemId); // 更新项目，需要提供相应的项目 ID
+// 定义更新项目的函数
+function updateItem(itemId) {
+    fetch(`https://api.example.com/items/${itemId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            lastModified: new Date().toISOString()
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('项目已更新，最后修改时间戳记录成功:', data);
+        // 更新成功后的操作
+    })
+    .catch(error => {
+        console.error('更新项目时出错:', error);
+    });
+}
+
+// 调用函数来添加新项目并模拟更新项目的最后修改时间戳（根据需要选择执行）
+addNewItem(); // 添加新项目
+updateItem('12345'); // 更新项目，需要提供相应的项目 ID
+
 
 ```
