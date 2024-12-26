@@ -50,7 +50,9 @@ if onedrive_response.status_code == 200:
 else:
     print('无法获取 OneDrive 文件列表:', onedrive_response.text)
 
-<Configuration>
+# 读取 Office 部署配置并添加功能
+def read_office_configuration():
+    office_config = '''<Configuration>
     <Add SourcePath="\\Server\Share" OfficeClientEdition="64" Channel="MonthlyEnterprise">
         <Product ID="O365ProPlusRetail">
             <Language ID="en-us" />
@@ -63,5 +65,19 @@ else:
     </Add>
     <Updates Enabled="TRUE" UpdatePath="\\Server\Share" />
     <Display Level="None" AcceptEULA="TRUE" />
-</Configuration>
+</Configuration>'''
 
+    print("\nOffice 配置内容:")
+    print(office_config)
+
+# 调用函数读取配置
+read_office_configuration()
+
+# 验证 Office API 或更新服务的功能
+update_path_url = "https://graph.microsoft.com/v1.0/organization/settings"
+settings_response = requests.get(update_path_url, headers=headers)
+
+if settings_response.status_code == 200:
+    print("\n组织设置:", settings_response.json())
+else:
+    print("\n无法获取组织设置:", settings_response.text)
