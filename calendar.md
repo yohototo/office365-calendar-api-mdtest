@@ -177,6 +177,106 @@ function updateItem(itemId) {
 // 调用函数来添加新项目并模拟更新项目的最后修改时间戳（根据需要选择执行）
 addNewItem(); // 添加新项目
 updateItem('12345'); // 更新项目，需要提供相应的项目 ID
+// Async function to add and then update an item
+async function addAndUpdateItem() {
+    try {
+        // Add a new item
+        const newItem = await addNewItemAsync();
+        const newItemId = newItem.d.Id; // Get the ID of the newly added item
+
+        // Update the newly added item
+        await updateItemAsync(newItemId);
+    } catch (error) {
+        console.error('Error during add and update operations:', error);
+    }
+}
+
+// Modified addNewItem function returning a promise
+function addNewItemAsync() {
+    return new Promise((resolve, reject) => {
+        const listTitle = "SampleList";
+        const endpointUrl = `${siteUrl}/_api/web/lists/getbytitle('${listTitle}')/items`;
+
+        const currentTime = getCurrentDateTime();
+
+        const itemData = {
+            '__metadata': { 'type': getListItemEntityType(listTitle) },
+            'Title': 'New Async Item',
+            'Description': 'This item was added asynchronously.',
+            'CreatedTimestamp': currentTime
+        };
+
+        const accessToken = getAccessToken();
+
+        fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;odata=verbose',
+                'Content-Type': 'application/json;odata=verbose',
+                'Authorization': 'Bearer ' + accessToken
+            },
+            body: JSON.stringify(itemData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Asynchronous item added:', data);
+            resolve(data);
+        })
+        .catch(error => {
+            console.error('Error adding asynchronous item:', error);
+            reject(error);
+        });
+    });
+}
+
+// Modified updateItem function returning a promise
+function updateItemAsync(itemId) {
+    return new Promise((resolve, reject) => {
+        const listTitle = "SampleList";
+        const endpointUrl = `${siteUrl}/_api/web/lists/getbytitle('${listTitle}')/items(${itemId})`;
+
+        const currentTime = getCurrentDateTime();
+
+        const itemData = {
+            '__metadata': { 'type': getListItemEntityType(listTitle) },
+            'LastModifiedTimestamp': currentTime
+            // Update other fields as necessary
+        };
+
+        const accessToken = getAccessToken();
+
+        fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;odata=verbose',
+                'Content-Type': 'application/json;odata=verbose',
+                'Authorization': 'Bearer ' + accessToken,
+                'X-HTTP-Method': 'MERGE',
+                'If-Match': '*'
+            },
+            body: JSON.stringify(itemData)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Item with ID ${itemId} updated asynchronously.`);
+                resolve();
+            } else {
+                return response.json().then(err => {
+                    throw new Error(err.error.message.value);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error updating asynchronous item:', error);
+            reject(error);
+        });
+    });
+}
+
+// Execute the asynchronous add and update operation
+addAndUpdateItem();
+
+
 
 
 ```
