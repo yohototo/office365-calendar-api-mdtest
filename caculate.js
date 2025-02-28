@@ -1,52 +1,69 @@
-// calculate.js
-
-// 加法
-function add(a, b) {
-    return a + b;
+// 绝对值
+function absolute(a) {
+    return Math.abs(a);
 }
 
-// 减法
-function subtract(a, b) {
-    return a - b;
-}
-
-// 乘法
-function multiply(a, b) {
-    return a * b;
-}
-
-// 除法
-function divide(a, b) {
-    if (b === 0) {
-        throw new Error("Division by zero is not allowed.");
+// 阶乘
+function factorial(n) {
+    if (n < 0 || !Number.isInteger(n)) {
+        throw new Error("Factorial is only defined for non-negative integers.");
     }
-    return a / b;
-}
-
-// 求模
-function modulus(a, b) {
-    return a % b;
-}
-
-// 指数
-function power(a, b) {
-    return Math.pow(a, b);
-}
-
-// 平方根
-function sqrt(a) {
-    if (a < 0) {
-        throw new Error("Square root of negative number is not allowed.");
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+        result *= i;
     }
-    return Math.sqrt(a);
+    return result;
 }
+
+// 最大公约数（GCD）
+function gcd(a, b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+    while (b !== 0) {
+        [a, b] = [b, a % b];
+    }
+    return a;
+}
+
+// 最小公倍数（LCM）
+function lcm(a, b) {
+    if (a === 0 || b === 0) {
+        return 0;
+    }
+    return Math.abs(a * b) / gcd(a, b);
+}
+
+// 随机数生成
+function randomInRange(min, max) {
+    if (min > max) {
+        throw new Error("Minimum value cannot be greater than maximum value.");
+    }
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// 数组求和
+function sumArray(arr) {
+    if (!Array.isArray(arr)) {
+        throw new Error("Input must be an array.");
+    }
+    return arr.reduce((sum, num) => sum + num, 0);
+}
+
+// 数组平均值
+function averageArray(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) {
+        throw new Error("Input must be a non-empty array.");
+    }
+    return sumArray(arr) / arr.length;
+}
+
 // 示例用法
-const num1 = 10;
-const num2 = 5;
+console.log(`绝对值结果：${absolute(-15)}`);
+console.log(`阶乘结果：${factorial(5)}`);
+console.log(`最大公约数结果：${gcd(48, 18)}`);
+console.log(`最小公倍数结果：${lcm(12, 15)}`);
+console.log(`随机数结果（1到100）：${randomInRange(1, 100)}`);
 
-console.log(`加法结果：${add(num1, num2)}`);
-console.log(`减法结果：${subtract(num1, num2)}`);
-console.log(`乘法结果：${multiply(num1, num2)}`);
-console.log(`除法结果：${divide(num1, num2)}`);
-console.log(`求模结果：${modulus(num1, num2)}`);
-console.log(`指数结果：${power(num1, num2)}`);
+const numbers = [1, 2, 3, 4, 5];
+console.log(`数组求和结果：${sumArray(numbers)}`);
+console.log(`数组平均值结果：${averageArray(numbers)}`);
