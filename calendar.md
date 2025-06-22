@@ -276,7 +276,112 @@ function updateItemAsync(itemId) {
 // Execute the asynchronous add and update operation
 addAndUpdateItem();
 
+// 完善缺失的辅助函数
+function getAccessToken() {
+    // 实际应用中应通过Azure AD获取真实令牌
+    return 'YOUR_ACCESS_TOKEN';
+}
 
+function getListItemEntityType(listTitle) {
+    // 根据列表标题返回对应的OData类型
+    const typeMap = {
+        'SampleList': 'SP.Data.SampleListListItem'
+    };
+    return typeMap[listTitle] || 'SP.Data.GenericListItem';
+}
+
+// 合并更新函数并优化错误处理
+async function updateItemAsync(itemId) {
+    try {
+        const listTitle = "SampleList";
+        const endpointUrl = `${siteUrl}/_api/web/lists/getbytitle('${listTitle}')/items(${itemId})`;
+        
+        const currentTime = getCurrentDateTime();
+        const itemData = {
+            '__metadata': { 'type': getListItemEntityType(listTitle) },
+            'LastModifiedTimestamp': currentTime
+        };
+
+        const accessToken = getAccessToken();
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;odata=verbose',
+                'Content-Type': 'application/json;odata=verbose',
+                'Authorization': 'Bearer ' + accessToken,
+                'X-HTTP-Method': 'MERGE',
+                'If-Match': '*'
+            },
+            body: JSON.stringify(itemData)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        console.log(`Item ${itemId} updated successfully`);
+        return await response.json();
+    } catch (error) {
+        console.error('Update failed:', error);
+        throw error;
+    }
+}
+
+// 增加硬件信息同步功能
+async function syncHardwareInfoToSharePoint() {
+    try {
+        // 调用Python脚本获取硬件信息（需Node.js环境）
+        const { exec } = require('child_process');
+        const pythonPath = 'python'; // 替换为实际Python路径
+        const scriptPath = './hardware_info.py'; // Python脚本路径
+        
+        return new Promise((resolve, reject) => {
+            exec(`${pythonPath} ${scriptPath}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Python执行错误: ${error.message}`);
+                    return reject(error);
+                }
+                if (stderr) {
+                    console.warn(`Python警告: ${stderr}`);
+                }
+                resolve(JSON.parse(stdout)); // 假设Python输出JSON格式
+            });
+        });
+    } catch (error) {
+        console.error('同步失败:', error);
+        throw error;
+    }
+}
+
+// 主流程：获取硬件信息并持久化到SharePoint
+async function main() {
+    try {
+        // 1. 获取硬件信息
+        const hardwareData = await syncHardwareInfoToSharePoint();
+        
+        // 2. 创建新事件（Microsoft Graph）
+        const graphClient = Client.init({
+            authProvider: (_, callback) => callback(null, 'YOUR_GRAPH_TOKEN')
+        });
+        
+        const event = {
+            subject: 'VPS监控报告',
+            body: { content: JSON.stringify(hardwareData) },
+            start: { dateTime: new Date().toISOString(), timeZone: 'UTC' },
+            end: { dateTime: new Date().toISOString(), timeZone: 'UTC' }
+        };
+
+        const createdEvent = await graphClient.api('/me/events').post(event);
+        console.log('日历事件创建成功:', createdEvent.id);
+
+        // 3. 更新SharePoint列表
+        const newItem = await addNewItemAsync();
+        await updateItemAsync(newItem.d.Id);
+        
+    } catch (error) {
+        console.error('主流程异常:', error);
+    }
+}
+
+// 执行主流程
+main();
 
 
 ```
