@@ -2,7 +2,8 @@
 
 - [calendar](#calendar)
 
-
+# beizhu Initialize Graph client
+const client = Client.init({
  
 ## <a id="a"></a>  python
 
