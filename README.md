@@ -63,4 +63,5 @@ python main.py
 1220 店铺开始稳定在至少2单左右；
 1222 第一个店铺还在风控中，今天3单
 1224 每天上链接应该是有利于提高权重的
+1225 圣诞节，今天下雨有点冷，开始有冬天的感觉了
 ```anshibandaoti shijian shabihelanren 
