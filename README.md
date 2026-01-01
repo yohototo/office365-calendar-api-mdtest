@@ -67,4 +67,5 @@ python main.py
 1228 今天5+1,销量转好
 1229 今天只有1
 1231 今天报了10+1
+0101 4+1
 ```anshibandaoti shijian shabihelanren 
