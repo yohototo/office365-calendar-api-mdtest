@@ -68,4 +68,5 @@ python main.py
 1229 今天只有1
 1231 今天报了10+1
 0101 4+1
+0102 2+1
 ```anshibandaoti shijian shabihelanren 
