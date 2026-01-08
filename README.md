@@ -72,4 +72,5 @@ python main.py
 0103 5+4
 0104 4+1
 0105 4+8
+0108 吵架，因为我说了一句不要输出焦虑
 ```anshibandaoti shijian shabihelanren 
